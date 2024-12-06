@@ -31,7 +31,7 @@ const TorrentList = ({
   token,
 }) => {
   const {
-    publicRuntimeConfig: { SQ_SITE_WIDE_FREELEECH },
+    publicRuntimeConfig: { KM_SITE_WIDE_FREELEECH },
   } = getConfig();
 
   const router = useRouter();
@@ -95,7 +95,7 @@ const TorrentList = ({
                 {row.fetchedBy?.bookmarked && (
                   <Box as={Bookmark} size={16} color="primary" ml={2} />
                 )}
-                {(row.freeleech || SQ_SITE_WIDE_FREELEECH === true) && (
+                {(row.freeleech || KM_SITE_WIDE_FREELEECH === true) && (
                   <Text as="span" fontSize={0} color="primary" ml={3}>
                     {getLocaleString("torrFL")}
                   </Text>

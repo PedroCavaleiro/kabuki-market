@@ -157,7 +157,7 @@ const Loading = styled(LoaderAlt)`
 const getLocaleString = (locale) => (key) =>
   locales[locale][key] ?? locales.en[key];
 
-const SqTracker = ({ Component, pageProps, initialTheme }) => {
+const KabukiMarket = ({ Component, pageProps, initialTheme }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [theme, setTheme] = useState(initialTheme || "light");
@@ -175,18 +175,18 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_CUSTOM_THEME,
-      SQ_SITE_WIDE_FREELEECH,
-      SQ_API_URL,
-      SQ_MINIMUM_RATIO,
-      SQ_MAXIMUM_HIT_N_RUNS,
-      SQ_SITE_DEFAULT_LOCALE,
+      KM_CUSTOM_THEME,
+      KM_SITE_WIDE_FREELEECH,
+      KM_API_URL,
+      KM_MINIMUM_RATIO,
+      KM_MAXIMUM_HIT_N_RUNS,
+      KM_SITE_DEFAULT_LOCALE,
     },
   } = getConfig();
 
-  const [locale, setLocale] = useState(SQ_SITE_DEFAULT_LOCALE ?? "en");
+  const [locale, setLocale] = useState(KM_SITE_DEFAULT_LOCALE ?? "en");
 
-  const allowThemeToggle = !Object.keys(SQ_CUSTOM_THEME ?? {}).some(
+  const allowThemeToggle = !Object.keys(KM_CUSTOM_THEME ?? {}).some(
     (key) => key !== "primary"
   );
 
@@ -226,7 +226,7 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
 
   const fetchUserStats = async () => {
     try {
-      const res = await fetch(`${SQ_API_URL}/account/get-stats`, {
+      const res = await fetch(`${KM_API_URL}/account/get-stats`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -245,7 +245,7 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
 
   const appTheme = {
     ...baseTheme,
-    colors: getThemeColours(theme, SQ_CUSTOM_THEME),
+    colors: getThemeColours(theme, KM_CUSTOM_THEME),
     name: theme,
   };
 
@@ -263,7 +263,7 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
   return (
     <>
       <Head>
-        <title>sqtracker</title>
+        <title>kabuki market</title>
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link
@@ -329,7 +329,7 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
                         <Loading size={24} />
                       </Box>
                     )}
-                    {SQ_SITE_WIDE_FREELEECH === true && (
+                    {KM_SITE_WIDE_FREELEECH === true && (
                       <Text
                         icon={Bell}
                         iconColor="primary"
@@ -348,13 +348,13 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
                           alignItems="center"
                           color="grey"
                         >
-                          {Number(SQ_MINIMUM_RATIO) !== -1 && (
+                          {Number(KM_MINIMUM_RATIO) !== -1 && (
                             <>
                               <Sort size={14} />
                               <Text
                                 color={
                                   userStats.ratio !== -1 &&
-                                  userStats.ratio < SQ_MINIMUM_RATIO
+                                  userStats.ratio < KM_MINIMUM_RATIO
                                     ? "error"
                                     : "grey"
                                 }
@@ -376,12 +376,12 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
                           <Text fontSize={0} ml={0} mr={2}>
                             {prettyBytes(userStats.down ?? 0)}
                           </Text>
-                          {Number(SQ_MAXIMUM_HIT_N_RUNS) !== -1 && (
+                          {Number(KM_MAXIMUM_HIT_N_RUNS) !== -1 && (
                             <>
                               <Run size={16} />
                               <Text
                                 color={
-                                  userStats.hitnruns > SQ_MAXIMUM_HIT_N_RUNS
+                                  userStats.hitnruns > KM_MAXIMUM_HIT_N_RUNS
                                     ? "error"
                                     : "grey"
                                 }
@@ -442,10 +442,10 @@ const SqTracker = ({ Component, pageProps, initialTheme }) => {
   );
 };
 
-SqTracker.getInitialProps = async (appContext) => {
+KabukiMarket.getInitialProps = async (appContext) => {
   const { theme } = appContext?.ctx?.req?.cookies || {};
   const appInitialProps = App.getInitialProps(appContext);
   return { initialTheme: theme, ...appInitialProps };
 };
 
-export default SqTracker;
+export default KabukiMarket;

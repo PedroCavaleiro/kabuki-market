@@ -18,7 +18,7 @@ export const WikiFields = ({ values }) => {
   const [slugValue, setSlugValue] = useState(values?.slug);
 
   const {
-    publicRuntimeConfig: { SQ_BASE_URL, SQ_ALLOW_UNREGISTERED_VIEW },
+    publicRuntimeConfig: { KM_BASE_URL, KM_ALLOW_UNREGISTERED_VIEW },
   } = getConfig();
 
   const { getLocaleString } = useContext(LocaleContext);
@@ -47,7 +47,7 @@ export const WikiFields = ({ values }) => {
         required
       />
       <Text color="grey" fontSize={0} mb={4}>
-        {getLocaleString("wikiPageWillBeVisibleAt")} {SQ_BASE_URL}/wiki
+        {getLocaleString("wikiPageWillBeVisibleAt")} {KM_BASE_URL}/wiki
         {slugValue}
       </Text>
       <Input
@@ -66,7 +66,7 @@ export const WikiFields = ({ values }) => {
         mb={4}
         required
       />
-      {SQ_ALLOW_UNREGISTERED_VIEW && (
+      {KM_ALLOW_UNREGISTERED_VIEW && (
         <Checkbox
           name="public"
           label={getLocaleString("wikiAllowUnregisteredView")}
@@ -91,7 +91,7 @@ const NewWiki = ({ token, userRole }) => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const handleCreate = async (e) => {
@@ -100,7 +100,7 @@ const NewWiki = ({ token, userRole }) => {
     const form = new FormData(e.target);
 
     try {
-      const createWikiRes = await fetch(`${SQ_API_URL}/wiki/new`, {
+      const createWikiRes = await fetch(`${KM_API_URL}/wiki/new`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -154,10 +154,10 @@ export const getServerSideProps = withAuthServerSideProps(async ({ token }) => {
   if (!token) return { props: {} };
 
   const {
-    serverRuntimeConfig: { SQ_JWT_SECRET },
+    serverRuntimeConfig: { KM_JWT_SECRET },
   } = getConfig();
 
-  const { role } = jwt.verify(token, SQ_JWT_SECRET);
+  const { role } = jwt.verify(token, KM_JWT_SECRET);
 
   return { props: { token, userRole: role } };
 });

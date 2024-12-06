@@ -54,9 +54,9 @@ const Index = ({
 }) => {
   const {
     publicRuntimeConfig: {
-      SQ_SITE_NAME,
-      SQ_ALLOW_REGISTER,
-      SQ_TORRENT_CATEGORIES,
+      KM_SITE_NAME,
+      KM_ALLOW_REGISTER,
+      KM_TORRENT_CATEGORIES,
     },
   } = getConfig();
 
@@ -66,7 +66,7 @@ const Index = ({
     return (
       <>
         <SEO />
-        <PublicLanding name={SQ_SITE_NAME} allowRegister={SQ_ALLOW_REGISTER} />
+        <PublicLanding name={KM_SITE_NAME} allowRegister={KM_ALLOW_REGISTER} />
       </>
     );
 
@@ -153,7 +153,7 @@ const Index = ({
       </Text>
       <TorrentList
         torrents={latestTorrents}
-        categories={SQ_TORRENT_CATEGORIES}
+        categories={KM_TORRENT_CATEGORIES}
       />
     </>
   );
@@ -164,11 +164,11 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
+      publicRuntimeConfig: { KM_API_URL },
     } = getConfig();
 
     try {
-      const latestTorrentsRes = await fetch(`${SQ_API_URL}/torrent/latest`, {
+      const latestTorrentsRes = await fetch(`${KM_API_URL}/torrent/latest`, {
         headers: fetchHeaders,
       });
       if (
@@ -180,7 +180,7 @@ export const getServerSideProps = withAuthServerSideProps(
       const latestTorrents = await latestTorrentsRes.json();
 
       const latestAnnouncementRes = await fetch(
-        `${SQ_API_URL}/announcements/latest`,
+        `${KM_API_URL}/announcements/latest`,
         {
           headers: fetchHeaders,
         }
@@ -190,7 +190,7 @@ export const getServerSideProps = withAuthServerSideProps(
         latestAnnouncement = await latestAnnouncementRes.json();
       }
 
-      const verifiedRes = await fetch(`${SQ_API_URL}/account/get-verified`, {
+      const verifiedRes = await fetch(`${KM_API_URL}/account/get-verified`, {
         headers: fetchHeaders,
       });
       const emailVerified = await verifiedRes.json();

@@ -34,7 +34,7 @@ const Wiki = ({ page, allPages, token, userRole, slug }) => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_SITE_NAME, SQ_API_URL },
+    publicRuntimeConfig: { KM_SITE_NAME, KM_API_URL },
   } = getConfig();
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Wiki = ({ page, allPages, token, userRole, slug }) => {
     setLoading(true);
 
     try {
-      const deleteRes = await fetch(`${SQ_API_URL}/wiki/${page.slug}`, {
+      const deleteRes = await fetch(`${KM_API_URL}/wiki/${page.slug}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ const Wiki = ({ page, allPages, token, userRole, slug }) => {
 
     try {
       const updateWikiRes = await fetch(
-        `${SQ_API_URL}/wiki/update/${page._id}`,
+        `${KM_API_URL}/wiki/update/${page._id}`,
         {
           method: "POST",
           headers: {
@@ -129,7 +129,7 @@ const Wiki = ({ page, allPages, token, userRole, slug }) => {
         justifyContent="space-between"
         mb={3}
       >
-        <Text as="h1">{page?.title ?? `${SQ_SITE_NAME} wiki`}</Text>
+        <Text as="h1">{page?.title ?? `${KM_SITE_NAME} wiki`}</Text>
         {userRole === "admin" && !editing && (
           <Box display="flex" alignItems="center">
             <Link href="/wiki/new" passHref>
@@ -276,14 +276,14 @@ export const getServerSideProps = withAuthServerSideProps(
     const parsedSlug = slug?.length ? slug.join("/") : "";
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role } = token ? jwt.verify(token, SQ_JWT_SECRET) : { role: null };
+    const { role } = token ? jwt.verify(token, KM_JWT_SECRET) : { role: null };
 
     try {
-      const wikiRes = await fetch(`${SQ_API_URL}/wiki/${parsedSlug}`, {
+      const wikiRes = await fetch(`${KM_API_URL}/wiki/${parsedSlug}`, {
         headers: fetchHeaders,
       });
       if (

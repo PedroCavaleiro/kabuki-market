@@ -18,7 +18,7 @@ const VerifyEmail = () => {
   const { token } = router.query;
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const { getLocaleString } = useContext(LocaleContext);
@@ -27,7 +27,7 @@ const VerifyEmail = () => {
     const verify = async () => {
       if (token) {
         try {
-          const res = await fetch(`${SQ_API_URL}/verify-email`, {
+          const res = await fetch(`${KM_API_URL}/verify-email`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

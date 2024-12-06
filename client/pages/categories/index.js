@@ -28,7 +28,7 @@ const CategoryItem = styled.li(() =>
 
 const Categories = ({ tags }) => {
   const {
-    publicRuntimeConfig: { SQ_TORRENT_CATEGORIES },
+    publicRuntimeConfig: { KM_TORRENT_CATEGORIES },
   } = getConfig();
   const { getLocaleString } = useContext(LocaleContext);
 
@@ -39,7 +39,7 @@ const Categories = ({ tags }) => {
         {getLocaleString("catCategories")}
       </Text>
       <Box mb={5}>
-        {Object.keys(SQ_TORRENT_CATEGORIES).length ? (
+        {Object.keys(KM_TORRENT_CATEGORIES).length ? (
           <Box
             as="ul"
             display="grid"
@@ -47,7 +47,7 @@ const Categories = ({ tags }) => {
             gridGap={4}
             _css={{ pl: 0, listStyle: "none" }}
           >
-            {Object.keys(SQ_TORRENT_CATEGORIES).map((category) => (
+            {Object.keys(KM_TORRENT_CATEGORIES).map((category) => (
               <CategoryItem key={category}>
                 <Link
                   href={`/categories/${slugify(category, { lower: true })}`}
@@ -105,11 +105,11 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token && !isPublicAccess) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
+      publicRuntimeConfig: { KM_API_URL },
     } = getConfig();
 
     try {
-      const tagsRes = await fetch(`${SQ_API_URL}/torrent/tags`, {
+      const tagsRes = await fetch(`${KM_API_URL}/torrent/tags`, {
         headers: fetchHeaders,
       });
       if (

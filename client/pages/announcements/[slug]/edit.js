@@ -26,7 +26,7 @@ const EditAnnouncement = ({ announcement, token, userRole }) => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const handleCreate = async (e) => {
@@ -36,7 +36,7 @@ const EditAnnouncement = ({ announcement, token, userRole }) => {
 
     try {
       const updateAnnouncementRes = await fetch(
-        `${SQ_API_URL}/announcements/edit/${announcement._id}`,
+        `${KM_API_URL}/announcements/edit/${announcement._id}`,
         {
           method: "POST",
           headers: {
@@ -123,15 +123,15 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role } = jwt.verify(token, SQ_JWT_SECRET);
+    const { role } = jwt.verify(token, KM_JWT_SECRET);
 
     try {
       const announcementRes = await fetch(
-        `${SQ_API_URL}/announcements/${slug}`,
+        `${KM_API_URL}/announcements/${slug}`,
         {
           headers: fetchHeaders,
         }

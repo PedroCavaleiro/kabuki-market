@@ -22,7 +22,7 @@ const Report = ({ report, token, userRole }) => {
   const { setLoading } = useContext(LoadingContext);
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const router = useRouter();
@@ -34,7 +34,7 @@ const Report = ({ report, token, userRole }) => {
 
     try {
       const resolveRes = await fetch(
-        `${SQ_API_URL}/reports/resolve/${report._id}`,
+        `${KM_API_URL}/reports/resolve/${report._id}`,
         {
           method: "POST",
           headers: {
@@ -139,16 +139,16 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role } = jwt.verify(token, SQ_JWT_SECRET);
+    const { role } = jwt.verify(token, KM_JWT_SECRET);
 
     if (role !== "admin") return { props: { report: null, userRole: role } };
 
     try {
-      const reportRes = await fetch(`${SQ_API_URL}/reports/${id}`, {
+      const reportRes = await fetch(`${KM_API_URL}/reports/${id}`, {
         headers: fetchHeaders,
       });
       if (

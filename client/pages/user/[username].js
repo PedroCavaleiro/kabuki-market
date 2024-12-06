@@ -35,10 +35,10 @@ const User = ({ token, user, userRole }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_TORRENT_CATEGORIES,
-      SQ_MINIMUM_RATIO,
-      SQ_MAXIMUM_HIT_N_RUNS,
-      SQ_API_URL,
+      KM_TORRENT_CATEGORIES,
+      KM_MINIMUM_RATIO,
+      KM_MAXIMUM_HIT_N_RUNS,
+      KM_API_URL,
     },
   } = getConfig();
 
@@ -52,7 +52,7 @@ const User = ({ token, user, userRole }) => {
 
     try {
       const res = await fetch(
-        `${SQ_API_URL}/user/${banned ? "unban" : "ban"}/${user.username}`,
+        `${KM_API_URL}/user/${banned ? "unban" : "ban"}/${user.username}`,
         {
           method: "POST",
           headers: {
@@ -92,10 +92,10 @@ const User = ({ token, user, userRole }) => {
 
   const cards = useMemo(() => {
     let c = 2;
-    if (SQ_MINIMUM_RATIO !== -1) c++;
-    if (SQ_MAXIMUM_HIT_N_RUNS !== -1) c++;
+    if (KM_MINIMUM_RATIO !== -1) c++;
+    if (KM_MAXIMUM_HIT_N_RUNS !== -1) c++;
     return c;
-  }, [SQ_MINIMUM_RATIO, SQ_MAXIMUM_HIT_N_RUNS]);
+  }, [KM_MINIMUM_RATIO, KM_MAXIMUM_HIT_N_RUNS]);
 
   return (
     <>
@@ -191,7 +191,7 @@ const User = ({ token, user, userRole }) => {
         gridGap={4}
         mb={5}
       >
-        {SQ_MINIMUM_RATIO !== -1 && (
+        {KM_MINIMUM_RATIO !== -1 && (
           <Box bg="sidebar" borderRadius={2} p={4}>
             <Text
               fontWeight={600}
@@ -213,17 +213,17 @@ const User = ({ token, user, userRole }) => {
                 <Text
                   as="span"
                   fontSize={3}
-                  color={user.ratio >= SQ_MINIMUM_RATIO ? "success" : "error"}
+                  color={user.ratio >= KM_MINIMUM_RATIO ? "success" : "error"}
                 >
                   {" "}
-                  {user.ratio >= SQ_MINIMUM_RATIO ? ">" : "<"}{" "}
-                  {SQ_MINIMUM_RATIO}
+                  {user.ratio >= KM_MINIMUM_RATIO ? ">" : "<"}{" "}
+                  {KM_MINIMUM_RATIO}
                 </Text>
               )}
             </Text>
           </Box>
         )}
-        {SQ_MAXIMUM_HIT_N_RUNS !== -1 && (
+        {KM_MAXIMUM_HIT_N_RUNS !== -1 && (
           <Box bg="sidebar" borderRadius={2} p={4}>
             <Text
               fontWeight={600}
@@ -242,12 +242,12 @@ const User = ({ token, user, userRole }) => {
                   as="span"
                   fontSize={3}
                   color={
-                    user.hitnruns <= SQ_MAXIMUM_HIT_N_RUNS ? "success" : "error"
+                    user.hitnruns <= KM_MAXIMUM_HIT_N_RUNS ? "success" : "error"
                   }
                 >
                   {" "}
-                  {user.hitnruns <= SQ_MAXIMUM_HIT_N_RUNS ? "<" : ">"}{" "}
-                  {SQ_MAXIMUM_HIT_N_RUNS}
+                  {user.hitnruns <= KM_MAXIMUM_HIT_N_RUNS ? "<" : ">"}{" "}
+                  {KM_MAXIMUM_HIT_N_RUNS}
                 </Text>
               )}
             </Text>
@@ -298,7 +298,7 @@ const User = ({ token, user, userRole }) => {
       <Box mb={5}>
         <TorrentList
           torrents={user.torrents}
-          categories={SQ_TORRENT_CATEGORIES}
+          categories={KM_TORRENT_CATEGORIES}
         />
       </Box>
       <Text as="h2" mb={4}>
@@ -350,14 +350,14 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role } = jwt.verify(token, SQ_JWT_SECRET);
+    const { role } = jwt.verify(token, KM_JWT_SECRET);
 
     try {
-      const userRes = await fetch(`${SQ_API_URL}/user/${username}`, {
+      const userRes = await fetch(`${KM_API_URL}/user/${username}`, {
         headers: fetchHeaders,
       });
 

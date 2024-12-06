@@ -39,9 +39,9 @@ const Request = ({ request, token, user }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_API_URL,
-      SQ_SITE_WIDE_FREELEECH,
-      SQ_TORRENT_CATEGORIES,
+      KM_API_URL,
+      KM_SITE_WIDE_FREELEECH,
+      KM_TORRENT_CATEGORIES,
     },
   } = getConfig();
 
@@ -53,7 +53,7 @@ const Request = ({ request, token, user }) => {
     setLoading(true);
 
     try {
-      const deleteRes = await fetch(`${SQ_API_URL}/requests/${request.index}`, {
+      const deleteRes = await fetch(`${KM_API_URL}/requests/${request.index}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ const Request = ({ request, token, user }) => {
 
     try {
       const commentRes = await fetch(
-        `${SQ_API_URL}/requests/comment/${request._id}`,
+        `${KM_API_URL}/requests/comment/${request._id}`,
         {
           method: "POST",
           headers: {
@@ -136,7 +136,7 @@ const Request = ({ request, token, user }) => {
 
     try {
       const suggestRes = await fetch(
-        `${SQ_API_URL}/requests/suggest/${request._id}`,
+        `${KM_API_URL}/requests/suggest/${request._id}`,
         {
           method: "POST",
           headers: {
@@ -179,7 +179,7 @@ const Request = ({ request, token, user }) => {
 
     try {
       const acceptRes = await fetch(
-        `${SQ_API_URL}/requests/accept/${request._id}`,
+        `${KM_API_URL}/requests/accept/${request._id}`,
         {
           method: "POST",
           headers: {
@@ -282,7 +282,7 @@ const Request = ({ request, token, user }) => {
                 cell: ({ value, row }) => (
                   <Text>
                     {value}
-                    {(row.freeleech || SQ_SITE_WIDE_FREELEECH === true) && (
+                    {(row.freeleech || KM_SITE_WIDE_FREELEECH === true) && (
                       <Text as="span" fontSize={0} color="primary" ml={3}>
                         {getLocaleString("torrFL")}
                       </Text>
@@ -296,7 +296,7 @@ const Request = ({ request, token, user }) => {
                 accessor: "type",
                 cell: ({ value }) => (
                   <Text icon={ListUl}>
-                    {Object.keys(SQ_TORRENT_CATEGORIES).find(
+                    {Object.keys(KM_TORRENT_CATEGORIES).find(
                       (c) => slugify(c, { lower: true }) === value
                     ) || "None"}
                   </Text>
@@ -415,14 +415,14 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { id } = jwt.verify(token, SQ_JWT_SECRET);
+    const { id } = jwt.verify(token, KM_JWT_SECRET);
 
     try {
-      const requestRes = await fetch(`${SQ_API_URL}/requests/${index}`, {
+      const requestRes = await fetch(`${KM_API_URL}/requests/${index}`, {
         headers: fetchHeaders,
       });
       if (

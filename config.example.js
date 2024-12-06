@@ -4,7 +4,7 @@
 module.exports = {
   envs: {
     // The name of your tracker site. Maximum 20 characters.
-    KM_SITE_NAME: "sqtracker demo",
+    KM_SITE_NAME: "kabuki-market demo",
 
     // A short description of your tracker site. Maximum 80 characters.
     KM_SITE_DESCRIPTION: "A short description for your tracker site",

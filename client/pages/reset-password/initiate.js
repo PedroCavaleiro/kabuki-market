@@ -14,7 +14,7 @@ const InitiatePasswordReset = () => {
   const { getLocaleString } = useContext(LocaleContext);
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const handleInitiate = async (e) => {
@@ -23,7 +23,7 @@ const InitiatePasswordReset = () => {
     const form = new FormData(e.target);
 
     try {
-      const res = await fetch(`${SQ_API_URL}/reset-password/initiate`, {
+      const res = await fetch(`${KM_API_URL}/reset-password/initiate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

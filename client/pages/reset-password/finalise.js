@@ -18,7 +18,7 @@ const FinalisePasswordReset = ({ token, email, tokenError }) => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const handleInitiate = async (e) => {
@@ -27,7 +27,7 @@ const FinalisePasswordReset = ({ token, email, tokenError }) => {
     const form = new FormData(e.target);
 
     try {
-      const res = await fetch(`${SQ_API_URL}/reset-password/finalise`, {
+      const res = await fetch(`${KM_API_URL}/reset-password/finalise`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,11 +93,11 @@ const FinalisePasswordReset = ({ token, email, tokenError }) => {
 
 export const getServerSideProps = async ({ query: { token } }) => {
   const {
-    serverRuntimeConfig: { SQ_JWT_SECRET },
+    serverRuntimeConfig: { KM_JWT_SECRET },
   } = getConfig();
   if (!token) return { props: { tokenError: "Token not provided" } };
   try {
-    const decoded = await jwt.verify(token, SQ_JWT_SECRET);
+    const decoded = await jwt.verify(token, KM_JWT_SECRET);
     if (decoded.validUntil < Date.now()) {
       return {
         props: { email: decoded.user, tokenError: "Token has expired" },

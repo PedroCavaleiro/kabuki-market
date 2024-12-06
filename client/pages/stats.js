@@ -56,16 +56,16 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role } = jwt.verify(token, SQ_JWT_SECRET);
+    const { role } = jwt.verify(token, KM_JWT_SECRET);
 
     if (role !== "admin") return { props: { reports: [], userRole: role } };
 
     try {
-      const statsRes = await fetch(`${SQ_API_URL}/admin/stats`, {
+      const statsRes = await fetch(`${KM_API_URL}/admin/stats`, {
         headers: fetchHeaders,
       });
       if (

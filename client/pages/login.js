@@ -24,7 +24,7 @@ const Login = () => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const handleLogin = async (e) => {
@@ -33,7 +33,7 @@ const Login = () => {
     const form = new FormData(e.target);
 
     try {
-      const res = await fetch(`${SQ_API_URL}/login`, {
+      const res = await fetch(`${KM_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

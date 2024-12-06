@@ -6,7 +6,7 @@ import LocaleContext from "../utils/LocaleContext";
 
 const Rss = () => {
   const {
-    publicRuntimeConfig: { SQ_BASE_URL },
+    publicRuntimeConfig: { KM_BASE_URL },
   } = getConfig();
 
   const { getLocaleString } = useContext(LocaleContext);
@@ -19,7 +19,7 @@ const Rss = () => {
       </Text>
       <Text mb={4}>
         {getLocaleString("rssThereRSSFeedAt")}{" "}
-        <strong>{SQ_BASE_URL}/api/rss</strong>.
+        <strong>{KM_BASE_URL}/api/rss</strong>.
       </Text>
       <Text mb={4}>
         {getLocaleString("rssToAuthenticateYourself")}{" "}

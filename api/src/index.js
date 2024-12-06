@@ -9,7 +9,6 @@ import nodemailer from "nodemailer";
 import ratelimit from "express-rate-limit";
 import Tracker from "bittorrent-tracker";
 import * as Sentry from "@sentry/node";
-import * as Tracing from "@sentry/tracing";
 import config from "../../config";
 import validateConfig from "./utils/validateConfig";
 import createTrackerRoute from "./tracker/routes";
@@ -46,22 +45,22 @@ validateConfig(config).then(() => {
     });
 
     Sentry.setContext("deployment", {
-      name: process.env.SQ_SITE_NAME,
-      url: process.env.SQ_BASE_URL,
-      adminEmail: process.env.SQ_ADMIN_EMAIL,
+      name: process.env.KM_SITE_NAME,
+      url: process.env.KM_BASE_URL,
+      adminEmail: process.env.KM_ADMIN_EMAIL,
     });
   }
 
   let mail;
 
-  if (!process.env.SQ_DISABLE_EMAIL) {
+  if (!process.env.KM_DISABLE_EMAIL) {
     mail = nodemailer.createTransport({
-      host: process.env.SQ_SMTP_HOST,
-      port: process.env.SQ_SMTP_PORT,
-      secure: process.env.SQ_SMTP_SECURE,
+      host: process.env.KM_SMTP_HOST,
+      port: process.env.KM_SMTP_PORT,
+      secure: process.env.KM_SMTP_SECURE,
       auth: {
-        user: process.env.SQ_SMTP_USER,
-        pass: process.env.SQ_SMTP_PASS,
+        user: process.env.KM_SMTP_USER,
+        pass: process.env.KM_SMTP_PASS,
       },
     });
   }
@@ -69,7 +68,7 @@ validateConfig(config).then(() => {
   const connectToDb = () => {
     console.log("[km] initiating db connection...");
     mongoose
-      .connect(process.env.SQ_MONGO_URL, {
+      .connect(process.env.KM_MONGO_URL, {
         useNewUrlParser: true,
         useFindAndModify: false,
         useUnifiedTopology: true,
@@ -128,7 +127,7 @@ validateConfig(config).then(() => {
     keyGenerator: (req) => {
       if (
         req.headers["x-forwarded-for"] &&
-        req.headers["x-km-server-secret"] === process.env.SQ_SERVER_SECRET
+        req.headers["x-km-server-secret"] === process.env.KM_SERVER_SECRET
       )
         return req.headers["x-forwarded-for"].split(",")[0];
       return req.ip;
@@ -153,7 +152,7 @@ validateConfig(config).then(() => {
 
   app.get("/", (req, res) => {
     res.setHeader("Content-Type", "text/plain");
-    res.send(`■ kabuki-market running: ${process.env.SQ_SITE_NAME}`).status(200);
+    res.send(`■ kabuki-market running: ${process.env.KM_SITE_NAME}`).status(200);
   });
 
   // auth routes
@@ -187,8 +186,8 @@ validateConfig(config).then(() => {
     res.status(500).send(`kabuki-market API error: ${err}`);
   });
 
-  const port = process.env.SQ_PORT || 3001;
+  const port = process.env.KM_PORT || 3001;
   app.listen(port, () => {
-    console.log(`[km] ■ sqtracker running http://localhost:${port}`);
+    console.log(`[km] ■ kabuki-market running http://localhost:${port}`);
   });
 });

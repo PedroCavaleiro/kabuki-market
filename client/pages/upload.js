@@ -191,11 +191,11 @@ const Upload = ({ token, userId }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_BASE_URL,
-      SQ_API_URL,
-      SQ_TORRENT_CATEGORIES,
-      SQ_ALLOW_ANONYMOUS_UPLOAD,
-      SQ_EXTENSION_BLACKLIST = [],
+      KM_BASE_URL,
+      KM_API_URL,
+      KM_TORRENT_CATEGORIES,
+      KM_ALLOW_ANONYMOUS_UPLOAD,
+      KM_EXTENSION_BLACKLIST = [],
     },
   } = getConfig();
 
@@ -288,7 +288,7 @@ const Upload = ({ token, userId }) => {
 
     try {
       if (!torrentFile) throw new Error("No .torrent file added");
-      const uploadRes = await fetch(`${SQ_API_URL}/torrent/upload`, {
+      const uploadRes = await fetch(`${KM_API_URL}/torrent/upload`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -336,7 +336,7 @@ const Upload = ({ token, userId }) => {
 
     try {
       const suggestionsRes = await fetch(
-        `${SQ_API_URL}/group/search?query=${encodeURIComponent(value)}`,
+        `${KM_API_URL}/group/search?query=${encodeURIComponent(value)}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -374,11 +374,11 @@ const Upload = ({ token, userId }) => {
             fontFamily="mono"
             _css={{ userSelect: "all", wordBreak: "break-all" }}
           >
-            {SQ_BASE_URL}/sq/{userId}/announce
+            {KM_BASE_URL}/km/{userId}/announce
           </Text>
         </Text>
       </Box>
-      {!!SQ_EXTENSION_BLACKLIST.length && (
+      {!!KM_EXTENSION_BLACKLIST.length && (
         <Infobox mb={5}>
           <Text mb={3}>{getLocaleString("uploadInfoBox1")}</Text>
           <Text
@@ -391,7 +391,7 @@ const Upload = ({ token, userId }) => {
             px={3}
             py={1}
           >
-            {SQ_EXTENSION_BLACKLIST.join(", ")}
+            {KM_EXTENSION_BLACKLIST.join(", ")}
           </Text>
         </Infobox>
       )}
@@ -457,7 +457,7 @@ const Upload = ({ token, userId }) => {
           </Box>
         </Box>
         <TorrentFields
-          categories={SQ_TORRENT_CATEGORIES}
+          categories={KM_TORRENT_CATEGORIES}
           handleGroupSearch={handleGroupSearch}
           groupSuggestions={
             groupSuggestions.length ? (
@@ -539,7 +539,7 @@ const Upload = ({ token, userId }) => {
             </Button>
           </Box>
         )}
-        {SQ_ALLOW_ANONYMOUS_UPLOAD && (
+        {KM_ALLOW_ANONYMOUS_UPLOAD && (
           <Checkbox
             name="anonymous"
             label={getLocaleString("uploadAnonymousUpload")}

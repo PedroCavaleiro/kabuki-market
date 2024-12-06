@@ -92,13 +92,13 @@ const Account = ({ token, invites = [], user, userRole }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_API_URL,
-      SQ_BP_EARNED_PER_GB,
-      SQ_BP_EARNED_PER_FILLED_REQUEST,
-      SQ_BP_COST_PER_INVITE,
-      SQ_BP_COST_PER_GB,
-      SQ_ALLOW_REGISTER,
-      SQ_DISABLE_EMAIL,
+      KM_API_URL,
+      KM_BP_EARNED_PER_GB,
+      KM_BP_EARNED_PER_FILLED_REQUEST,
+      KM_BP_COST_PER_INVITE,
+      KM_BP_COST_PER_GB,
+      KM_ALLOW_REGISTER,
+      KM_DISABLE_EMAIL,
     },
   } = getConfig();
 
@@ -110,7 +110,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
     const form = new FormData(e.target);
 
     try {
-      const inviteRes = await fetch(`${SQ_API_URL}/account/generate-invite`, {
+      const inviteRes = await fetch(`${KM_API_URL}/account/generate-invite`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +137,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
       addNotification(
         "success",
         `${getLocaleString(
-          SQ_DISABLE_EMAIL
+          KM_DISABLE_EMAIL
             ? "accInviteSentSuccessNoEmail"
             : "accInviteSentSuccess"
         )}`
@@ -164,7 +164,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
 
     try {
       const changePasswordRes = await fetch(
-        `${SQ_API_URL}/account/change-password`,
+        `${KM_API_URL}/account/change-password`,
         {
           method: "POST",
           headers: {
@@ -209,7 +209,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
     try {
       const amount = parseInt(form.get("amount"));
 
-      const buyRes = await fetch(`${SQ_API_URL}/account/buy`, {
+      const buyRes = await fetch(`${KM_API_URL}/account/buy`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -261,7 +261,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
         const totpToken = form.get("token");
 
         if (totpToken) {
-          const enableRes = await fetch(`${SQ_API_URL}/account/totp/enable`, {
+          const enableRes = await fetch(`${KM_API_URL}/account/totp/enable`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -281,7 +281,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
           }
         } else {
           const generateRes = await fetch(
-            `${SQ_API_URL}/account/totp/generate`,
+            `${KM_API_URL}/account/totp/generate`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -295,7 +295,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
       } else {
         const totpToken = form.get("token");
 
-        const disableRes = await fetch(`${SQ_API_URL}/account/totp/disable`, {
+        const disableRes = await fetch(`${KM_API_URL}/account/totp/disable`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -326,7 +326,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
     const form = new FormData(e.target);
 
     try {
-      const deleteAccountRes = await fetch(`${SQ_API_URL}/account/delete`, {
+      const deleteAccountRes = await fetch(`${KM_API_URL}/account/delete`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -373,42 +373,42 @@ const Account = ({ token, invites = [], user, userRole }) => {
       <Box as="ul" mb={4}>
         <Text as="li">
           {getLocaleString("accYouWillEarn")}{" "}
-          <strong>{SQ_BP_EARNED_PER_GB}</strong>{" "}
+          <strong>{KM_BP_EARNED_PER_GB}</strong>{" "}
           {pluralize(
             `${getLocaleString("accBonusPointsHave")}`,
-            SQ_BP_EARNED_PER_GB
+            KM_BP_EARNED_PER_GB
           )}{" "}
           {getLocaleString("accForEveryGBYouUpload")}.
         </Text>
         <Text as="li">
           {getLocaleString("accYouWillEarn")}{" "}
-          <strong>{SQ_BP_EARNED_PER_FILLED_REQUEST}</strong>{" "}
+          <strong>{KM_BP_EARNED_PER_FILLED_REQUEST}</strong>{" "}
           {pluralize(
             `${getLocaleString("accBonusPointsHave")}`,
-            SQ_BP_EARNED_PER_FILLED_REQUEST
+            KM_BP_EARNED_PER_FILLED_REQUEST
           )}{" "}
           {getLocaleString("accEveryRequestYouFulfill")}{" "}
-          <strong>{SQ_BP_EARNED_PER_FILLED_REQUEST * 2}</strong>{" "}
+          <strong>{KM_BP_EARNED_PER_FILLED_REQUEST * 2}</strong>{" "}
           {getLocaleString("accIfYouAreAlsUploaderAcceptTorrent")}.
         </Text>
       </Box>
       <Box _css={{ "> * + *": { mt: 3 } }} mb={5}>
-        {SQ_ALLOW_REGISTER === "invite" && (
+        {KM_ALLOW_REGISTER === "invite" && (
           <BuyItem
             text={getLocaleString("accPurchaseInvites")}
-            cost={SQ_BP_COST_PER_INVITE}
+            cost={KM_BP_COST_PER_INVITE}
             wallet={bonusPoints}
             handleBuy={(e) => handleBuy(e, "invite")}
           />
         )}
         <BuyItem
           text={getLocaleString("accPurchaseUpload1GB")}
-          cost={SQ_BP_COST_PER_GB}
+          cost={KM_BP_COST_PER_GB}
           wallet={bonusPoints}
           handleBuy={(e) => handleBuy(e, "upload")}
         />
       </Box>
-      {(SQ_ALLOW_REGISTER === "invite" || userRole === "admin") && (
+      {(KM_ALLOW_REGISTER === "invite" || userRole === "admin") && (
         <>
           <Box
             display="flex"
@@ -434,7 +434,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
                 disabled={remainingInvites < 1}
               >
                 {getLocaleString(
-                  SQ_DISABLE_EMAIL ? "accSendInviteNoEmail" : "accSendInvite"
+                  KM_DISABLE_EMAIL ? "accSendInviteNoEmail" : "accSendInvite"
                 )}
               </Button>
             </Box>
@@ -662,7 +662,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
         <Modal close={() => setShowInviteModal(false)}>
           <Text mb={5}>
             {getLocaleString(
-              SQ_DISABLE_EMAIL ? "accInviteText1NoEmail" : "accInviteText1"
+              KM_DISABLE_EMAIL ? "accInviteText1NoEmail" : "accInviteText1"
             )}
           </Text>
           <form onSubmit={handleGenerateInvite}>
@@ -690,7 +690,7 @@ const Account = ({ token, invites = [], user, userRole }) => {
               </Button>
               <Button>
                 {getLocaleString(
-                  SQ_DISABLE_EMAIL ? "accSendInviteNoEmail" : "accSendInvite"
+                  KM_DISABLE_EMAIL ? "accSendInviteNoEmail" : "accSendInvite"
                 )}
               </Button>
             </Box>
@@ -733,14 +733,14 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role, username } = jwt.verify(token, SQ_JWT_SECRET);
+    const { role, username } = jwt.verify(token, KM_JWT_SECRET);
 
     try {
-      const userRes = await fetch(`${SQ_API_URL}/user/${username}`, {
+      const userRes = await fetch(`${KM_API_URL}/user/${username}`, {
         headers: fetchHeaders,
       });
       if (
@@ -750,7 +750,7 @@ export const getServerSideProps = withAuthServerSideProps(
         throw "banned";
       }
       const user = await userRes.json();
-      const invitesRes = await fetch(`${SQ_API_URL}/account/invites`, {
+      const invitesRes = await fetch(`${KM_API_URL}/account/invites`, {
         headers: fetchHeaders,
       });
       const invites = await invitesRes.json();

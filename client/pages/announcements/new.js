@@ -26,7 +26,7 @@ const NewAnnouncement = ({ token, userRole }) => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const handleCreate = async (e) => {
@@ -36,7 +36,7 @@ const NewAnnouncement = ({ token, userRole }) => {
 
     try {
       const createAnnouncementRes = await fetch(
-        `${SQ_API_URL}/announcements/new`,
+        `${KM_API_URL}/announcements/new`,
         {
           method: "POST",
           headers: {
@@ -118,10 +118,10 @@ export const getServerSideProps = withAuthServerSideProps(async ({ token }) => {
   if (!token) return { props: {} };
 
   const {
-    serverRuntimeConfig: { SQ_JWT_SECRET },
+    serverRuntimeConfig: { KM_JWT_SECRET },
   } = getConfig();
 
-  const { role } = jwt.verify(token, SQ_JWT_SECRET);
+  const { role } = jwt.verify(token, KM_JWT_SECRET);
 
   return { props: { token, userRole: role } };
 });

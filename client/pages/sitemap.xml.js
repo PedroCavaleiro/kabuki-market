@@ -5,32 +5,32 @@ const Sitemap = () => {};
 export const getServerSideProps = async ({ req, res }) => {
   const {
     publicRuntimeConfig: {
-      SQ_BASE_URL,
-      SQ_API_URL,
-      SQ_ALLOW_UNREGISTERED_VIEW,
+      KM_BASE_URL,
+      KM_API_URL,
+      KM_ALLOW_UNREGISTERED_VIEW,
     },
-    serverRuntimeConfig: { SQ_SERVER_SECRET },
+    serverRuntimeConfig: { KM_SERVER_SECRET },
   } = getConfig();
 
-  const urls = [SQ_BASE_URL, `${SQ_BASE_URL}/login`, `${SQ_BASE_URL}/register`];
+  const urls = [KM_BASE_URL, `${KM_BASE_URL}/login`, `${KM_BASE_URL}/register`];
 
-  if (SQ_ALLOW_UNREGISTERED_VIEW) {
+  if (KM_ALLOW_UNREGISTERED_VIEW) {
     try {
-      const listRes = await fetch(`${SQ_API_URL}/torrent/all`, {
+      const listRes = await fetch(`${KM_API_URL}/torrent/all`, {
         headers: {
           "Content-Type": "application/json",
           "X-Forwarded-For":
             req.headers["x-forwarded-for"] ?? req.socket.remoteAddress,
-          "X-Sq-Server-Secret": SQ_SERVER_SECRET,
-          "X-Sq-Public-Access": true,
+          "X-Km-Server-Secret": KM_SERVER_SECRET,
+          "X-Km-Public-Access": true,
         },
       });
       const torrents = await listRes.json();
       for (const { infoHash } of torrents) {
-        urls.push(`${SQ_BASE_URL}/torrent/${infoHash}`);
+        urls.push(`${KM_BASE_URL}/torrent/${infoHash}`);
       }
     } catch (e) {
-      console.error(`[sq] could not list torrents: ${e}`);
+      console.error(`[km] could not list torrents: ${e}`);
     }
   }
 

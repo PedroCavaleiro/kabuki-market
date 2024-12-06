@@ -10,7 +10,7 @@ import LocaleContext from "../utils/LocaleContext";
 
 const Bookmarks = ({ results }) => {
   const {
-    publicRuntimeConfig: { SQ_TORRENT_CATEGORIES },
+    publicRuntimeConfig: { KM_TORRENT_CATEGORIES },
   } = getConfig();
 
   const { getLocaleString } = useContext(LocaleContext);
@@ -24,7 +24,7 @@ const Bookmarks = ({ results }) => {
       {results.torrents.length ? (
         <TorrentList
           torrents={results.torrents}
-          categories={SQ_TORRENT_CATEGORIES}
+          categories={KM_TORRENT_CATEGORIES}
           total={results.total}
         />
       ) : (
@@ -39,11 +39,11 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
+      publicRuntimeConfig: { KM_API_URL },
     } = getConfig();
 
     try {
-      const bookmarksRes = await fetch(`${SQ_API_URL}/account/bookmarks`, {
+      const bookmarksRes = await fetch(`${KM_API_URL}/account/bookmarks`, {
         headers: fetchHeaders,
       });
       if (

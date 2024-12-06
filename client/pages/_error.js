@@ -11,13 +11,13 @@ const ErrorPage = () => {
   const [rateLimited, setRateLimited] = useState(false);
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   useEffect(() => {
     const checkRateLimit = async () => {
       try {
-        const res = await fetch(SQ_API_URL);
+        const res = await fetch(KM_API_URL);
         if (res.status === 429) setRateLimited(true);
       } catch (e) {}
     };
@@ -38,7 +38,7 @@ const ErrorPage = () => {
         <Text>
           {getLocaleString("errIfErrorPersist")}{" "}
           <a
-            href="https://github.com/tdjsnelling/sqtracker/issues"
+            href="https://github.com/PedroCavaleiro/kabuki-market"
             target="_blank"
             rel="noreferrer"
           >

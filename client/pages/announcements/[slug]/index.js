@@ -32,7 +32,7 @@ const Announcement = ({ announcement, token, userRole }) => {
   const commentInputRef = useRef();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL },
+    publicRuntimeConfig: { KM_API_URL },
   } = getConfig();
 
   const router = useRouter();
@@ -46,7 +46,7 @@ const Announcement = ({ announcement, token, userRole }) => {
 
     try {
       const deleteRes = await fetch(
-        `${SQ_API_URL}/announcements/${announcement.slug}`,
+        `${KM_API_URL}/announcements/${announcement.slug}`,
         {
           method: "DELETE",
           headers: {
@@ -79,7 +79,7 @@ const Announcement = ({ announcement, token, userRole }) => {
 
     try {
       const pinRes = await fetch(
-        `${SQ_API_URL}/announcements/pin/${announcement._id}/${
+        `${KM_API_URL}/announcements/pin/${announcement._id}/${
           pinned ? "unpin" : "pin"
         }`,
         {
@@ -123,7 +123,7 @@ const Announcement = ({ announcement, token, userRole }) => {
 
     try {
       const commentRes = await fetch(
-        `${SQ_API_URL}/announcements/comment/${announcement._id}`,
+        `${KM_API_URL}/announcements/comment/${announcement._id}`,
         {
           method: "POST",
           headers: {
@@ -304,15 +304,15 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
-    const { role } = jwt.verify(token, SQ_JWT_SECRET);
+    const { role } = jwt.verify(token, KM_JWT_SECRET);
 
     try {
       const announcementRes = await fetch(
-        `${SQ_API_URL}/announcements/${slug}`,
+        `${KM_API_URL}/announcements/${slug}`,
         {
           headers: fetchHeaders,
         }

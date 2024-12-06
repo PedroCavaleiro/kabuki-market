@@ -27,7 +27,7 @@ const Register = ({ token: inviteToken, tokenError }) => {
   const router = useRouter();
 
   const {
-    publicRuntimeConfig: { SQ_API_URL, SQ_ALLOW_REGISTER },
+    publicRuntimeConfig: { KM_API_URL, KM_ALLOW_REGISTER },
   } = getConfig();
 
   const handleRegister = async (e) => {
@@ -36,7 +36,7 @@ const Register = ({ token: inviteToken, tokenError }) => {
     const form = new FormData(e.target);
 
     try {
-      const res = await fetch(`${SQ_API_URL}/register`, {
+      const res = await fetch(`${KM_API_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ const Register = ({ token: inviteToken, tokenError }) => {
     setLoading(false);
   };
 
-  if (SQ_ALLOW_REGISTER !== "open" && SQ_ALLOW_REGISTER !== "invite") {
+  if (KM_ALLOW_REGISTER !== "open" && KM_ALLOW_REGISTER !== "invite") {
     return (
       <>
         <SEO title={getLocaleString("register")} />
@@ -142,13 +142,13 @@ const Register = ({ token: inviteToken, tokenError }) => {
 
 export const getServerSideProps = async ({ query: { token } }) => {
   const {
-    serverRuntimeConfig: { SQ_JWT_SECRET, SQ_ALLOW_REGISTER },
+    serverRuntimeConfig: { KM_JWT_SECRET, KM_ALLOW_REGISTER },
   } = getConfig();
-  if (SQ_ALLOW_REGISTER === "open") return { props: {} };
-  if (!token && SQ_ALLOW_REGISTER === "invite")
+  if (KM_ALLOW_REGISTER === "open") return { props: {} };
+  if (!token && KM_ALLOW_REGISTER === "invite")
     return { props: { tokenError: "Invite token not provided" } };
   try {
-    const decoded = await jwt.verify(token, SQ_JWT_SECRET);
+    const decoded = await jwt.verify(token, KM_JWT_SECRET);
     if (decoded.validUntil < Date.now())
       return { props: { tokenError: "Invite has expired" } };
     return { props: { token } };

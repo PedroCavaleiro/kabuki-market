@@ -85,18 +85,18 @@ const Navigation = ({ isMobile, menuIsOpen, setMenuIsOpen }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_SITE_NAME,
-      SQ_API_URL,
-      SQ_ALLOW_REGISTER,
-      SQ_VERSION,
-      SQ_ALLOW_UNREGISTERED_VIEW,
+      KM_SITE_NAME,
+      KM_API_URL,
+      KM_ALLOW_REGISTER,
+      KM_VERSION,
+      KM_ALLOW_UNREGISTERED_VIEW,
     },
   } = getConfig();
 
   useEffect(() => {
     const getUserRole = async () => {
       try {
-        const roleRes = await fetch(`${SQ_API_URL}/account/get-role`, {
+        const roleRes = await fetch(`${KM_API_URL}/account/get-role`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -157,7 +157,7 @@ const Navigation = ({ isMobile, menuIsOpen, setMenuIsOpen }) => {
             color="text"
             _css={{ textDecoration: "none", "&:visited": { color: "text" } }}
           >
-            {SQ_SITE_NAME}
+            {KM_SITE_NAME}
           </Text>
         </Link>
       </Box>
@@ -227,6 +227,12 @@ const Navigation = ({ isMobile, menuIsOpen, setMenuIsOpen }) => {
               </Link>
               {role === "admin" && (
                 <>
+                  <Link href="/users" passHref>
+                    <NavLink highlights={["/users"]}>
+                      <Text>{getLocaleString("navUsers")}</Text>
+                      <Error size={24} />
+                    </NavLink>
+                  </Link>
                   <Link href="/reports" passHref>
                     <NavLink highlights={["/reports"]}>
                       <Text>{getLocaleString("navReports")}</Text>
@@ -256,8 +262,8 @@ const Navigation = ({ isMobile, menuIsOpen, setMenuIsOpen }) => {
                   <LogInCircle size={24} />
                 </NavLink>
               </Link>
-              {(SQ_ALLOW_REGISTER === "open" ||
-                SQ_ALLOW_REGISTER === "invite") && (
+              {(KM_ALLOW_REGISTER === "open" ||
+                KM_ALLOW_REGISTER === "invite") && (
                 <Link href="/register" passHref>
                   <NavLink>
                     <Text>{getLocaleString("register")}</Text>
@@ -265,7 +271,7 @@ const Navigation = ({ isMobile, menuIsOpen, setMenuIsOpen }) => {
                   </NavLink>
                 </Link>
               )}
-              {SQ_ALLOW_UNREGISTERED_VIEW && (
+              {KM_ALLOW_UNREGISTERED_VIEW && (
                 <>
                   <Link href="/categories" passHref>
                     <NavLink>
@@ -298,13 +304,13 @@ const Navigation = ({ isMobile, menuIsOpen, setMenuIsOpen }) => {
         <Text color="grey" fontSize={0}>
           {getLocaleString("poweredBy")}{" "}
           <a
-            href="https://github.com/tdjsnelling/sqtracker"
+            href="https://github.com/PedroCavaleiro/kabuki-market"
             target="_blank"
             rel="noreferrer"
           >
-            ■ sqtracker
+            ■ kabuki-market
           </a>{" "}
-          v{SQ_VERSION}
+          v{KM_VERSION}
         </Text>
         <LocaleSelector
           value={locale}

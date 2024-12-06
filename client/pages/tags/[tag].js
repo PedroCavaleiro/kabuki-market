@@ -17,7 +17,7 @@ const Tag = ({ results, token }) => {
   } = router;
 
   const {
-    publicRuntimeConfig: { SQ_TORRENT_CATEGORIES, SQ_API_URL },
+    publicRuntimeConfig: { KM_TORRENT_CATEGORIES, KM_API_URL },
   } = getConfig();
 
   const { getLocaleString } = useContext(LocaleContext);
@@ -32,9 +32,9 @@ const Tag = ({ results, token }) => {
         <TorrentList
           torrents={torrents}
           setTorrents={setTorrents}
-          categories={SQ_TORRENT_CATEGORIES}
+          categories={KM_TORRENT_CATEGORIES}
           total={results.total}
-          fetchPath={`${SQ_API_URL}/torrent/search`}
+          fetchPath={`${KM_API_URL}/torrent/search`}
           token={token}
         />
       ) : (
@@ -54,7 +54,7 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token && !isPublicAccess) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
+      publicRuntimeConfig: { KM_API_URL },
     } = getConfig();
 
     const params = {
@@ -65,7 +65,7 @@ export const getServerSideProps = withAuthServerSideProps(
 
     try {
       const searchRes = await fetch(
-        `${SQ_API_URL}/torrent/search?${qs.stringify(params)}`,
+        `${KM_API_URL}/torrent/search?${qs.stringify(params)}`,
         {
           headers: fetchHeaders,
         }

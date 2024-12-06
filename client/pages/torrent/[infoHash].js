@@ -158,11 +158,11 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
   const {
     publicRuntimeConfig: {
-      SQ_API_URL,
-      SQ_TORRENT_CATEGORIES,
-      SQ_SITE_WIDE_FREELEECH,
-      SQ_MINIMUM_RATIO,
-      SQ_MAXIMUM_HIT_N_RUNS,
+      KM_API_URL,
+      KM_TORRENT_CATEGORIES,
+      KM_SITE_WIDE_FREELEECH,
+      KM_MINIMUM_RATIO,
+      KM_MAXIMUM_HIT_N_RUNS,
     },
   } = getConfig();
 
@@ -179,7 +179,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const uploadRes = await fetch(
-        `${SQ_API_URL}/torrent/edit/${torrent.infoHash}`,
+        `${KM_API_URL}/torrent/edit/${torrent.infoHash}`,
         {
           method: "POST",
           headers: {
@@ -221,7 +221,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const deleteRes = await fetch(
-        `${SQ_API_URL}/torrent/delete/${torrent.infoHash}`,
+        `${KM_API_URL}/torrent/delete/${torrent.infoHash}`,
         {
           method: "DELETE",
           headers: {
@@ -256,7 +256,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const commentRes = await fetch(
-        `${SQ_API_URL}/torrent/comment/${torrent.infoHash}`,
+        `${KM_API_URL}/torrent/comment/${torrent.infoHash}`,
         {
           method: "POST",
           headers: {
@@ -325,7 +325,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
       }
 
       const voteRes = await fetch(
-        `${SQ_API_URL}/torrent/${userVote !== vote ? "vote" : "unvote"}/${
+        `${KM_API_URL}/torrent/${userVote !== vote ? "vote" : "unvote"}/${
           torrent.infoHash
         }/${vote}`,
         {
@@ -361,7 +361,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const reportRes = await fetch(
-        `${SQ_API_URL}/torrent/report/${torrent.infoHash}`,
+        `${KM_API_URL}/torrent/report/${torrent.infoHash}`,
         {
           method: "POST",
           headers: {
@@ -401,7 +401,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const toggleRes = await fetch(
-        `${SQ_API_URL}/torrent/toggle-freeleech/${torrent.infoHash}`,
+        `${KM_API_URL}/torrent/toggle-freeleech/${torrent.infoHash}`,
         {
           method: "POST",
           headers: {
@@ -434,7 +434,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const removeRes = await fetch(
-        `${SQ_API_URL}/group/remove/${torrent.infoHash}`,
+        `${KM_API_URL}/group/remove/${torrent.infoHash}`,
         {
           method: "POST",
           headers: {
@@ -470,7 +470,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
 
     try {
       const bookmarkRes = await fetch(
-        `${SQ_API_URL}/torrent/bookmark/${torrent.infoHash}`,
+        `${KM_API_URL}/torrent/bookmark/${torrent.infoHash}`,
         {
           method: "POST",
           headers: {
@@ -505,11 +505,11 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
     setLoading(false);
   };
 
-  const category = Object.keys(SQ_TORRENT_CATEGORIES).find(
+  const category = Object.keys(KM_TORRENT_CATEGORIES).find(
     (c) => slugify(c, { lower: true }) === torrent.type
   );
 
-  const source = SQ_TORRENT_CATEGORIES[category].find(
+  const source = KM_TORRENT_CATEGORIES[category].find(
     (s) => slugify(s, { lower: true }) === torrent.source
   );
 
@@ -518,11 +518,11 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
     .reduce((children, { path, size }) => insert(children, path, size), []);
 
   const downloadDisabled =
-    (Number(SQ_MINIMUM_RATIO) !== -1 &&
+    (Number(KM_MINIMUM_RATIO) !== -1 &&
       userStats.ratio !== -1 &&
-      userStats.ratio < Number(SQ_MINIMUM_RATIO)) ||
-    (Number(SQ_MAXIMUM_HIT_N_RUNS) !== -1 &&
-      userStats.hitnruns > Number(SQ_MAXIMUM_HIT_N_RUNS));
+      userStats.ratio < Number(KM_MINIMUM_RATIO)) ||
+    (Number(KM_MAXIMUM_HIT_N_RUNS) !== -1 &&
+      userStats.hitnruns > Number(KM_MAXIMUM_HIT_N_RUNS));
 
   function isPngImage(data) {
     const pngHeader = "data:image/png;base64,";
@@ -541,7 +541,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
       >
         <Text as="h1" mb={[4, 0]}>
           {torrent.name}
-          {(torrent.freeleech || SQ_SITE_WIDE_FREELEECH === true) && (
+          {(torrent.freeleech || KM_SITE_WIDE_FREELEECH === true) && (
             <Text as="span" fontSize={3} color="primary" ml={3}>
               {getLocaleString("torrFL")}
             </Text>
@@ -594,7 +594,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
               href={
                 downloadDisabled
                   ? undefined
-                  : `${SQ_API_URL}/torrent/download/${torrent.infoHash}/${uid}`
+                  : `${KM_API_URL}/torrent/download/${torrent.infoHash}/${uid}`
               }
               target="_blank"
               disabled={downloadDisabled}
@@ -660,7 +660,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
           [getLocaleString("torrLeechers")]:
             torrent.leechers !== undefined ? torrent.leechers : "?",
           [getLocaleString("torrFreeleech")]:
-            torrent.freeleech || SQ_SITE_WIDE_FREELEECH === true
+            torrent.freeleech || KM_SITE_WIDE_FREELEECH === true
               ? [getLocaleString("torrYes")]
               : [getLocaleString("torrNo")],
         }}
@@ -847,7 +847,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
         {torrent.groupTorrents.length && hasGroup ? (
           <TorrentList
             torrents={torrent.groupTorrents}
-            categories={SQ_TORRENT_CATEGORIES}
+            categories={KM_TORRENT_CATEGORIES}
           />
         ) : (
           <Text color="grey">
@@ -900,7 +900,7 @@ const Torrent = ({ token, torrent = {}, userId, userRole, uid, userStats }) => {
         <Modal close={() => setShowEditModal(false)}>
           <form onSubmit={handleEdit}>
             <TorrentFields
-              categories={SQ_TORRENT_CATEGORIES}
+              categories={KM_TORRENT_CATEGORIES}
               values={{
                 name: torrent.name,
                 category: torrent.type,
@@ -955,16 +955,16 @@ export const getServerSideProps = withAuthServerSideProps(
     if (!token && !isPublicAccess) return { props: {} };
 
     const {
-      publicRuntimeConfig: { SQ_API_URL },
-      serverRuntimeConfig: { SQ_JWT_SECRET },
+      publicRuntimeConfig: { KM_API_URL },
+      serverRuntimeConfig: { KM_JWT_SECRET },
     } = getConfig();
 
     const { id, role } = token
-      ? jwt.verify(token, SQ_JWT_SECRET)
+      ? jwt.verify(token, KM_JWT_SECRET)
       : { id: null, role: null };
 
     try {
-      const torrentRes = await fetch(`${SQ_API_URL}/torrent/info/${infoHash}`, {
+      const torrentRes = await fetch(`${KM_API_URL}/torrent/info/${infoHash}`, {
         headers: fetchHeaders,
       });
 
@@ -979,7 +979,7 @@ export const getServerSideProps = withAuthServerSideProps(
 
       const torrent = await torrentRes.json();
 
-      const userStatsRes = await fetch(`${SQ_API_URL}/account/get-stats`, {
+      const userStatsRes = await fetch(`${KM_API_URL}/account/get-stats`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
