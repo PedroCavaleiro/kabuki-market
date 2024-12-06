@@ -20,6 +20,8 @@ const User = new mongoose.Schema({
     backup: [String],
   },
   bookmarks: [mongoose.Schema.ObjectId],
+  unlimited: Boolean,
+  unlimitedUntil: String,
 });
 
 export default mongoose.model("user", User);

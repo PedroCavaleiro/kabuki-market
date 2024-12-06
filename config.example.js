@@ -109,6 +109,40 @@ module.exports = {
     // In most cases set this value to true if you are connecting to port 465. For port 587 or 25 keep it false.
     // Not required if KM_DISABLE_EMAIL=true.
     KM_SMTP_SECURE: false,
+    // Plans available for purchase.
+    KM_PLANS: [
+      {
+        name: "1 YearUnlimited", // name of the plan
+        unlimitedDays: 395, // you can give extra years by changing this value
+        uploadTraffic: 0,
+        bonusPoints: 0, // bonus points given to the user
+        currency: "USD", // currency of the cost (EUR or USD)
+        cost: 100, // cost in the currency set above
+        benefits: ["No traffic statistics", "30 Free Days"],
+      },
+      {
+        name: "120 Bonus Points", // name of the plan
+        unlimitedDays: 0, // you can give extra years by changing this value
+        uploadTraffic: 40, // upload traffic given to the user (does not grant bonus points)
+        bonusPoints: 0, // bonus points given to the user
+        currency: "USD", // currency of the cost (EUR or USD)
+        cost: 20, // cost in the currency set above
+        benefits: ["40 GB upload traffic", "Easy ratio fix"],
+      },
+      {
+        name: "120 Bonus Points", // name of the plan
+        unlimitedDays: 0, // you can give extra years by changing this value
+        uploadTraffic: 0, // upload traffic given to the user (does not grant bonus points)
+        bonusPoints: 60, // bonus points given to the user
+        currency: "USD", // currency of the cost (EUR or USD)
+        cost: 10, // cost in the currency set above
+        benefits: [
+          "60 Bonus Points",
+          "Buy traffic or invites",
+          "Easy ratio fix",
+        ],
+      },
+    ],
   },
   secrets: {
     // A secret value to sign tokens with. Should be long and random.
