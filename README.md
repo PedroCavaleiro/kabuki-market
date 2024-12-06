@@ -9,6 +9,6 @@ During the main dev phase it will
 * [x] Remove traefik dependency
 * [x] Use nginx as proxy server
 * [ ] Include docs on how to use a existing Nginx Proxy Server or use a new one instead of the nginx dependency
-* [ ] Rewrite the client using Vue 3
+* [ ] Rewrite the client using Vue 3 (maybe a redesign down the line)
 * [ ] Improve the api adding more functionality
 * [ ] Support ways to buy points (PayPal planned)
