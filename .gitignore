@@ -1,0 +1,14 @@
+**/node_modules/
+.env*
+.idea/
+client/.next
+data/
+config.js
+.DS_Store
+dist/
+letsencrypt/
+*~
+*.bak
+*.orig
+*.diff
+*.patch

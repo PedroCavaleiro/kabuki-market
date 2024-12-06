@@ -1,0 +1,45 @@
+services:
+  nginx:
+    image: "nginx:latest"
+    container_name: km_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+  database:
+    container_name: km_mongdb
+    image: mongo:6.0
+    volumes:
+      - ./data:/data/db
+  api:
+    container_name: km_api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - type: bind
+        source: ./config.js
+        target: /kmtracker/config.js
+    depends_on:
+      - database
+  client:
+    container_name: km_client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - type: bind
+        source: ./config.js
+        target: /kmtracker/config.js
+      # - ./favicon.png:/kmtracker/public/favicon.png
+      # - ./favicon.ico:/kmtracker/public/favicon.ico
+    depends_on:
+      - api
+
