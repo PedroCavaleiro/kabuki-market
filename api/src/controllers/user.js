@@ -13,19 +13,19 @@ import { BYTES_GB } from "../tracker/announce";
 
 export const sendVerificationEmail = async (mail, address, token) => {
   await mail.sendMail({
-    from: `"${process.env.SQ_SITE_NAME}" <${process.env.SQ_MAIL_FROM_ADDRESS}>`,
+    from: `"${process.env.KM_SITE_NAME}" <${process.env.KM_MAIL_FROM_ADDRESS}>`,
     to: address,
     subject: "Verify your email address",
-    text: `Thank you for joining ${process.env.SQ_SITE_NAME}. Please follow the link below to verify your email address.
+    text: `Thank you for joining ${process.env.KM_SITE_NAME}. Please follow the link below to verify your email address.
         
-${process.env.SQ_BASE_URL}/verify-email?token=${token}`,
+${process.env.KM_BASE_URL}/verify-email?token=${token}`,
   });
 };
 
 export const register = (mail) => async (req, res, next) => {
   if (
-    process.env.SQ_ALLOW_REGISTER !== "open" &&
-    process.env.SQ_ALLOW_REGISTER !== "invite"
+    process.env.KM_ALLOW_REGISTER !== "open" &&
+    process.env.KM_ALLOW_REGISTER !== "invite"
   ) {
     res.status(403).send("Registration is currently closed");
     return;
@@ -34,7 +34,7 @@ export const register = (mail) => async (req, res, next) => {
   if (req.body.username && req.body.email && req.body.password) {
     let invite;
 
-    if (process.env.SQ_ALLOW_REGISTER === "invite") {
+    if (process.env.KM_ALLOW_REGISTER === "invite") {
       if (!req.body.invite) {
         res
           .status(403)
@@ -47,7 +47,7 @@ export const register = (mail) => async (req, res, next) => {
 
     if (req.body.invite) {
       try {
-        const decoded = jwt.verify(req.body.invite, process.env.SQ_JWT_SECRET);
+        const decoded = jwt.verify(req.body.invite, process.env.KM_JWT_SECRET);
         const { id } = decoded;
 
         invite = await Invite.findOne({ _id: id }).lean();
@@ -110,7 +110,7 @@ export const register = (mail) => async (req, res, next) => {
           role,
           invitedBy: invite?.invitingUser,
           remainingInvites: 0,
-          emailVerified: process.env.SQ_DISABLE_EMAIL,
+          emailVerified: process.env.KM_DISABLE_EMAIL,
           bonusPoints: 0,
           totp: {
             enabled: false,
@@ -125,14 +125,14 @@ export const register = (mail) => async (req, res, next) => {
 
         const createdUser = await newUser.save();
 
-        if (!process.env.SQ_DISABLE_EMAIL) {
+        if (!process.env.KM_DISABLE_EMAIL) {
           const emailVerificationValidUntil = created + 48 * 60 * 60 * 1000;
           const emailVerificationToken = jwt.sign(
             {
               user: req.body.email,
               validUntil: emailVerificationValidUntil,
             },
-            process.env.SQ_JWT_SECRET
+            process.env.KM_JWT_SECRET
           );
           await sendVerificationEmail(
             mail,
@@ -145,7 +145,7 @@ export const register = (mail) => async (req, res, next) => {
           if (req.body.invite) {
             const decoded = jwt.verify(
               req.body.invite,
-              process.env.SQ_JWT_SECRET
+              process.env.KM_JWT_SECRET
             );
             const { id } = decoded;
             await Invite.findOneAndUpdate(
@@ -166,7 +166,7 @@ export const register = (mail) => async (req, res, next) => {
                 created,
                 role,
               },
-              process.env.SQ_JWT_SECRET
+              process.env.KM_JWT_SECRET
             ),
             id: createdUser._id,
             uid: createdUser.uid,
@@ -238,7 +238,7 @@ export const login = async (req, res, next) => {
                 created: user.created,
                 role: user.role,
               },
-              process.env.SQ_JWT_SECRET
+              process.env.KM_JWT_SECRET
             ),
             id: user._id,
             uid: user.uid,
@@ -259,7 +259,7 @@ export const login = async (req, res, next) => {
 };
 
 export const generateInvite = (mail) => async (req, res, next) => {
-  if (process.env.SQ_ALLOW_REGISTER !== "invite" && req.userRole !== "admin") {
+  if (process.env.KM_ALLOW_REGISTER !== "invite" && req.userRole !== "admin") {
     res
       .status(403)
       .send("Can only send invites when tracker is in invite only mode");
@@ -289,20 +289,20 @@ export const generateInvite = (mail) => async (req, res, next) => {
 
     invite.token = jwt.sign(
       { id: invite._id, validUntil },
-      process.env.SQ_JWT_SECRET
+      process.env.KM_JWT_SECRET
     );
 
     const createdInvite = await invite.save();
 
     if (createdInvite) {
-      if (!process.env.SQ_DISABLE_EMAIL) {
+      if (!process.env.KM_DISABLE_EMAIL) {
         await mail.sendMail({
-          from: `"${process.env.SQ_SITE_NAME}" <${process.env.SQ_MAIL_FROM_ADDRESS}>`,
+          from: `"${process.env.KM_SITE_NAME}" <${process.env.KM_MAIL_FROM_ADDRESS}>`,
           to: email,
           subject: "Invite",
-          text: `You have been invited to join ${process.env.SQ_SITE_NAME}. Please follow the link below to register.
+          text: `You have been invited to join ${process.env.KM_SITE_NAME}. Please follow the link below to register.
         
-${process.env.SQ_BASE_URL}/register?token=${createdInvite.token}`,
+${process.env.KM_BASE_URL}/register?token=${createdInvite.token}`,
         });
       }
       res.send(createdInvite);
@@ -347,9 +347,9 @@ export const changePassword = (mail) => async (req, res, next) => {
         { $set: { password: hash } }
       );
 
-      if (!process.env.SQ_DISABLE_EMAIL) {
+      if (!process.env.KM_DISABLE_EMAIL) {
         await mail.sendMail({
-          from: `"${process.env.SQ_SITE_NAME}" <${process.env.SQ_MAIL_FROM_ADDRESS}>`,
+          from: `"${process.env.KM_SITE_NAME}" <${process.env.KM_MAIL_FROM_ADDRESS}>`,
           to: user.email,
           subject: "Your password was changed",
           text: `Your password was updated successfully at ${new Date().toISOString()} from ${
@@ -358,7 +358,7 @@ export const changePassword = (mail) => async (req, res, next) => {
         
 If you did not perform this action, follow the link below immediately to reset your password. If this was you, no action is required. 
         
-${process.env.SQ_BASE_URL}/reset-password/initiate`,
+${process.env.KM_BASE_URL}/reset-password/initiate`,
         });
       }
 
@@ -391,17 +391,17 @@ export const initiatePasswordReset = (mail) => async (req, res, next) => {
             .digest("hex")
             .substr(0, 6),
         },
-        process.env.SQ_JWT_SECRET
+        process.env.KM_JWT_SECRET
       );
 
-      if (!process.env.SQ_DISABLE_EMAIL) {
+      if (!process.env.KM_DISABLE_EMAIL) {
         await mail.sendMail({
-          from: `"${process.env.SQ_SITE_NAME}" <${process.env.SQ_MAIL_FROM_ADDRESS}>`,
+          from: `"${process.env.KM_SITE_NAME}" <${process.env.KM_MAIL_FROM_ADDRESS}>`,
           to: user.email,
           subject: "Password reset",
           text: `Please follow the link below to reset your password.
         
-${process.env.SQ_BASE_URL}/reset-password/finalise?token=${token}`,
+${process.env.KM_BASE_URL}/reset-password/finalise?token=${token}`,
         });
       }
 
@@ -428,7 +428,7 @@ export const finalisePasswordReset = async (req, res, next) => {
         user: email,
         validUntil,
         key,
-      } = jwt.verify(req.body.token, process.env.SQ_JWT_SECRET);
+      } = jwt.verify(req.body.token, process.env.KM_JWT_SECRET);
 
       if (email !== req.body.email) {
         res.status(403).send("Token is invalid");
@@ -748,7 +748,7 @@ export const verifyUserEmail = async (req, res, next) => {
     try {
       const { user: email, validUntil } = jwt.verify(
         req.body.token,
-        process.env.SQ_JWT_SECRET
+        process.env.KM_JWT_SECRET
       );
 
       if (validUntil < Date.now()) {
@@ -816,12 +816,12 @@ export const buyItems = async (req, res, next) => {
       const user = await User.findOne({ _id: req.userId }).lean();
 
       if (req.body.type === "invite") {
-        if (process.env.SQ_BP_COST_PER_INVITE === 0) {
+        if (process.env.KM_BP_COST_PER_INVITE === 0) {
           res.status(403).send("Not available to buy");
           return;
         }
 
-        const cost = amount * process.env.SQ_BP_COST_PER_INVITE;
+        const cost = amount * process.env.KM_BP_COST_PER_INVITE;
         if (cost > user.bonusPoints) {
           res.status(403).send("Not enough points for transaction");
           return;
@@ -839,12 +839,12 @@ export const buyItems = async (req, res, next) => {
 
         res.status(200).send((user.bonusPoints - cost).toString());
       } else if (req.body.type === "upload") {
-        if (process.env.SQ_BP_COST_PER_GB === 0) {
+        if (process.env.KM_BP_COST_PER_GB === 0) {
           res.status(403).send("Not available to buy");
           return;
         }
 
-        const cost = amount * process.env.SQ_BP_COST_PER_GB;
+        const cost = amount * process.env.KM_BP_COST_PER_GB;
         if (cost > user.bonusPoints) {
           res.status(403).send("Not enough points for transaction");
           return;
@@ -923,7 +923,7 @@ export const generateTotpSecret = async (req, res, next) => {
     const secret = speakeasy.generateSecret({ length: 20 });
     const url = speakeasy.otpauthURL({
       secret: secret.ascii,
-      label: `${process.env.SQ_SITE_NAME}: ${user.username}`,
+      label: `${process.env.KM_SITE_NAME}: ${user.username}`,
     });
     const imageDataUrl = await qrcode.toDataURL(url);
 

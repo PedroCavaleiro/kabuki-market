@@ -4,14 +4,14 @@ import Torrent from "../schema/torrent";
 import config from "../../../config";
 
 (async () => {
-  await mongoose.connect(config.envs.SQ_MONGO_URL, {
+  await mongoose.connect(config.envs.KM_MONGO_URL, {
     useNewUrlParser: true,
     useFindAndModify: false,
     useUnifiedTopology: true,
     useCreateIndex: true,
   });
 
-  console.log("[sq] connected to mongodb successfully");
+  console.log("[mk] connected to mongodb successfully");
 
   for await (const doc of Torrent.find()) {
     if (!doc.name_fuzzy?.some((n) => n !== "")) {

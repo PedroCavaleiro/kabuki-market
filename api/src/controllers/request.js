@@ -319,7 +319,7 @@ export const acceptCandidate = async (req, res, next) => {
         {
           $inc: {
             bonusPoints:
-              process.env.SQ_BP_EARNED_PER_FILLED_REQUEST *
+              process.env.KM_BP_EARNED_PER_FILLED_REQUEST *
               (torrent.uploadedBy.toString() ===
               candidate.suggestedBy.toString()
                 ? 2

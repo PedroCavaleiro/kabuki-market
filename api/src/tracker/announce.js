@@ -65,13 +65,13 @@ const handleAnnounce = async (req, res) => {
 
   // if users ratio is below the minimum threshold, and they are trying to download, deny announce
   if (
-    Number(process.env.SQ_MINIMUM_RATIO) !== -1 &&
-    ratio < Number(process.env.SQ_MINIMUM_RATIO) &&
+    Number(process.env.KM_MINIMUM_RATIO) !== -1 &&
+    ratio < Number(process.env.KM_MINIMUM_RATIO) &&
     ratio !== -1 &&
     Number(params.left > 0)
   ) {
     const response = bencode.encode({
-      "failure reason": `Announce denied: Ratio is below minimum threshold ${process.env.SQ_MINIMUM_RATIO}.`,
+      "failure reason": `Announce denied: Ratio is below minimum threshold ${process.env.KM_MINIMUM_RATIO}.`,
       peers: [],
       peers6: [],
     });
@@ -81,12 +81,12 @@ const handleAnnounce = async (req, res) => {
 
   // if user has committed more than the allowed number of hit'n'runs, and they are trying to download, deny announce
   if (
-    Number(process.env.SQ_MAXIMUM_HIT_N_RUNS) !== -1 &&
-    hitnruns >= Number(process.env.SQ_MAXIMUM_HIT_N_RUNS) &&
+    Number(process.env.KM_MAXIMUM_HIT_N_RUNS) !== -1 &&
+    hitnruns >= Number(process.env.KM_MAXIMUM_HIT_N_RUNS) &&
     Number(params.left > 0)
   ) {
     const response = bencode.encode({
-      "failure reason": `Announce denied: You have committed ${process.env.SQ_MAXIMUM_HIT_N_RUNS} or more hit'n'runs.`,
+      "failure reason": `Announce denied: You have committed ${process.env.KM_MAXIMUM_HIT_N_RUNS} or more hit'n'runs.`,
       peers: [],
       peers6: [],
     });
@@ -136,7 +136,7 @@ const handleAnnounce = async (req, res) => {
     const deltaGb = gbAfterUpload - currentGb;
     await User.findOneAndUpdate(
       { _id: user._id },
-      { $inc: { bonusPoints: deltaGb * process.env.SQ_BP_EARNED_PER_GB } }
+      { $inc: { bonusPoints: deltaGb * process.env.KM_BP_EARNED_PER_GB } }
     );
   }
 
@@ -165,11 +165,11 @@ const handleAnnounce = async (req, res) => {
         infoHash,
         downloaded: {
           session:
-            torrent.freeleech || process.env.SQ_SITE_WIDE_FREELEECH === true
+            torrent.freeleech || process.env.KM_SITE_WIDE_FREELEECH === true
               ? prevProgressRecord?.downloaded?.session ?? 0
               : downloaded,
           total:
-            torrent.freeleech || process.env.SQ_SITE_WIDE_FREELEECH === true
+            torrent.freeleech || process.env.KM_SITE_WIDE_FREELEECH === true
               ? prevProgressRecord?.downloaded?.total ?? 0
               : (prevProgressRecord?.downloaded?.total ?? 0) +
                 downloadDeltaSession,

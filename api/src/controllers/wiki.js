@@ -99,13 +99,13 @@ export const getWiki = async (req, res, next) => {
       return;
     }
 
-    if (process.env.SQ_ALLOW_UNREGISTERED_VIEW && !req.userId && !page.public) {
+    if (process.env.KM_ALLOW_UNREGISTERED_VIEW && !req.userId && !page.public) {
       page = null;
     }
 
     const query = {};
 
-    if (process.env.SQ_ALLOW_UNREGISTERED_VIEW && !req.userId) {
+    if (process.env.KM_ALLOW_UNREGISTERED_VIEW && !req.userId) {
       query.public = true;
     }
 

@@ -67,7 +67,7 @@ validateConfig(config).then(() => {
   }
 
   const connectToDb = () => {
-    console.log("[sq] initiating db connection...");
+    console.log("[km] initiating db connection...");
     mongoose
       .connect(process.env.SQ_MONGO_URL, {
         useNewUrlParser: true,
@@ -76,14 +76,14 @@ validateConfig(config).then(() => {
         useCreateIndex: true,
       })
       .catch((e) => {
-        console.error(`[sq] error on initial db connection: ${e.message}`);
+        console.error(`[km] error on initial db connection: ${e.message}`);
         setTimeout(connectToDb, 5000);
       });
   };
   connectToDb();
 
   mongoose.connection.once("open", async () => {
-    console.log("[sq] connected to mongodb successfully");
+    console.log("[km] connected to mongodb successfully");
     await createAdminUser(mail);
   });
 
@@ -128,7 +128,7 @@ validateConfig(config).then(() => {
     keyGenerator: (req) => {
       if (
         req.headers["x-forwarded-for"] &&
-        req.headers["x-sq-server-secret"] === process.env.SQ_SERVER_SECRET
+        req.headers["x-km-server-secret"] === process.env.SQ_SERVER_SECRET
       )
         return req.headers["x-forwarded-for"].split(",")[0];
       return req.ip;
@@ -145,15 +145,15 @@ validateConfig(config).then(() => {
     ws: false,
   });
   const onTrackerRequest = tracker._onRequest.bind(tracker);
-  app.get("/sq/*/announce", createTrackerRoute("announce", onTrackerRequest));
-  app.get("/sq/*/scrape", createTrackerRoute("scrape", onTrackerRequest));
+  app.get("/km/*/announce", createTrackerRoute("announce", onTrackerRequest));
+  app.get("/km/*/scrape", createTrackerRoute("scrape", onTrackerRequest));
 
   app.use(bodyParser.json({ limit: "5mb" }));
   app.use(cookieParser());
 
   app.get("/", (req, res) => {
     res.setHeader("Content-Type", "text/plain");
-    res.send(`■ sqtracker running: ${process.env.SQ_SITE_NAME}`).status(200);
+    res.send(`■ kabuki-market running: ${process.env.SQ_SITE_NAME}`).status(200);
   });
 
   // auth routes
@@ -183,12 +183,12 @@ validateConfig(config).then(() => {
   app.use("/wiki", wikiRoutes());
 
   app.use((err, req, res, next) => {
-    console.error(`[sq] error in ${req.url}:`, err);
-    res.status(500).send(`sqtracker API error: ${err}`);
+    console.error(`[km] error in ${req.url}:`, err);
+    res.status(500).send(`kabuki-market API error: ${err}`);
   });
 
   const port = process.env.SQ_PORT || 3001;
   app.listen(port, () => {
-    console.log(`[sq] ■ sqtracker running http://localhost:${port}`);
+    console.log(`[km] ■ sqtracker running http://localhost:${port}`);
   });
 });

@@ -8,21 +8,21 @@ const configSchema = yup
   .object({
     envs: yup
       .object({
-        SQ_SITE_NAME: yup.string().min(1).max(20).required(),
-        SQ_SITE_DESCRIPTION: yup.string().min(1).max(80).required(),
-        SQ_ALLOW_REGISTER: yup
+        KM_SITE_NAME: yup.string().min(1).max(20).required(),
+        KM_SITE_DESCRIPTION: yup.string().min(1).max(80).required(),
+        KM_ALLOW_REGISTER: yup
           .string()
           .oneOf(["open", "invite", "closed"])
           .required(),
-        SQ_ALLOW_ANONYMOUS_UPLOADS: yup.boolean().required(),
-        SQ_MINIMUM_RATIO: yup.number().min(-1).required(),
-        SQ_MAXIMUM_HIT_N_RUNS: yup.number().integer().min(-1).required(),
-        SQ_BP_EARNED_PER_GB: yup.number().min(0).required(),
-        SQ_BP_EARNED_PER_FILLED_REQUEST: yup.number().min(0).required(),
-        SQ_BP_COST_PER_INVITE: yup.number().min(0).required(),
-        SQ_BP_COST_PER_GB: yup.number().min(0).required(),
-        SQ_SITE_WIDE_FREELEECH: yup.boolean().required(),
-        SQ_TORRENT_CATEGORIES: yup.lazy((value) => {
+        KM_ALLOW_ANONYMOUS_UPLOADS: yup.boolean().required(),
+        KM_MINIMUM_RATIO: yup.number().min(-1).required(),
+        KM_MAXIMUM_HIT_N_RUNS: yup.number().integer().min(-1).required(),
+        KM_BP_EARNED_PER_GB: yup.number().min(0).required(),
+        KM_BP_EARNED_PER_FILLED_REQUEST: yup.number().min(0).required(),
+        KM_BP_COST_PER_INVITE: yup.number().min(0).required(),
+        KM_BP_COST_PER_GB: yup.number().min(0).required(),
+        KM_SITE_WIDE_FREELEECH: yup.boolean().required(),
+        KM_TORRENT_CATEGORIES: yup.lazy((value) => {
           const entries = Object.keys(value).reduce((obj, key) => {
             obj[key] = yup
               .array()
@@ -40,8 +40,8 @@ const configSchema = yup
           }, {});
           return yup.object(entries).required();
         }),
-        SQ_ALLOW_UNREGISTERED_VIEW: yup.boolean().required(),
-        SQ_CUSTOM_THEME: yup.object({
+        KM_ALLOW_UNREGISTERED_VIEW: yup.boolean().required(),
+        KM_CUSTOM_THEME: yup.object({
           primary: yup.string().matches(hexRegex),
           background: yup.string().matches(hexRegex),
           sidebar: yup.string().matches(hexRegex),
@@ -49,35 +49,35 @@ const configSchema = yup
           text: yup.string().matches(hexRegex),
           grey: yup.string().matches(hexRegex),
         }),
-        SQ_EXTENSION_BLACKLIST: yup.array().of(yup.string()).min(0),
-        SQ_SITE_DEFAULT_LOCALE: yup
+        KM_EXTENSION_BLACKLIST: yup.array().of(yup.string()).min(0),
+        KM_SITE_DEFAULT_LOCALE: yup
           .string()
           .oneOf(["en", "es", "it", "ru", "de", "zh", "eo", "fr"]),
-        SQ_BASE_URL: yup.string().matches(httpRegex).required(),
-        SQ_API_URL: yup.string().matches(httpRegex).required(),
-        SQ_MONGO_URL: yup.string().matches(mongoRegex).required(),
-        SQ_DISABLE_EMAIL: yup.boolean(),
-        SQ_MAIL_FROM_ADDRESS: yup
+        KM_BASE_URL: yup.string().matches(httpRegex).required(),
+        KM_API_URL: yup.string().matches(httpRegex).required(),
+        KM_MONGO_URL: yup.string().matches(mongoRegex).required(),
+        KM_DISABLE_EMAIL: yup.boolean(),
+        KM_MAIL_FROM_ADDRESS: yup
           .string()
           .email()
-          .when("SQ_DISABLE_EMAIL", {
+          .when("KM_DISABLE_EMAIL", {
             is: (val) => val !== true,
             then: (schema) => schema.required(),
           }),
-        SQ_SMTP_HOST: yup.string().when("SQ_DISABLE_EMAIL", {
+        KM_SMTP_HOST: yup.string().when("KM_DISABLE_EMAIL", {
           is: (val) => val !== true,
           then: (schema) => schema.required(),
         }),
-        SQ_SMTP_PORT: yup
+        KM_SMTP_PORT: yup
           .number()
           .integer()
           .min(1)
           .max(65535)
-          .when("SQ_DISABLE_EMAIL", {
+          .when("KM_DISABLE_EMAIL", {
             is: (val) => val !== true,
             then: (schema) => schema.required(),
           }),
-        SQ_SMTP_SECURE: yup.boolean().when("SQ_DISABLE_EMAIL", {
+        KM_SMTP_SECURE: yup.boolean().when("KM_DISABLE_EMAIL", {
           is: (val) => val !== true,
           then: (schema) => schema.required(),
         }),
@@ -87,17 +87,17 @@ const configSchema = yup
       .required(),
     secrets: yup
       .object({
-        SQ_JWT_SECRET: yup.string().required(),
-        SQ_SERVER_SECRET: yup.string().required(),
-        SQ_ADMIN_EMAIL: yup.string().email().required(),
-        SQ_SMTP_USER: yup.string(),
-        SQ_SMTP_PASS: yup.string(),
+        KM_JWT_SECRET: yup.string().required(),
+        KM_SERVER_SECRET: yup.string().required(),
+        KM_ADMIN_EMAIL: yup.string().email().required(),
+        KM_SMTP_USER: yup.string(),
+        KM_SMTP_PASS: yup.string(),
       })
-      .when("envs.SQ_DISABLE_EMAIL", {
+      .when("envs.KM_DISABLE_EMAIL", {
         is: (val) => val !== true,
         then: (schema) => {
-          schema.fields.SQ_SMTP_USER = yup.string().required();
-          schema.fields.SQ_SMTP_PASS = yup.string().required();
+          schema.fields.KM_SMTP_USER = yup.string().required();
+          schema.fields.KM_SMTP_PASS = yup.string().required();
           return schema;
         },
       })
@@ -117,9 +117,9 @@ const validateConfig = async (config) => {
       ...config.secrets,
     };
     await configSchema.validate(config);
-    console.log("[sq] configuration is valid");
+    console.log("[km] configuration is valid");
   } catch (e) {
-    console.error("[sq] ERROR: invalid configuration:", e.message);
+    console.error("[km] ERROR: invalid configuration:", e.message);
     process.exit(1);
   }
 };

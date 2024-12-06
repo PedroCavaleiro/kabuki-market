@@ -8,8 +8,8 @@
     "client"
   ],
   "scripts": {
-    "api:dev": "yarn workspace @sqtracker/api dev",
-    "client:dev": "yarn workspace @sqtracker/client dev",
+    "api:dev": "yarn workspace @kabuki-market/api dev",
+    "client:dev": "yarn workspace @kabuki-market/client dev",
     "dev": "npm-run-all --parallel api:dev client:dev",
     "lint": "prettier --write --ignore-path=.eslintignore \"**/*.{js,json}\""
   },

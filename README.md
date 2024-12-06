@@ -56,7 +56,7 @@ The roadmap is still being expanded.
 
 ## Changes to the initial Project
 
-* [ ] Redesign the UI using Vue 3
+* [ ] Rewrite the client using Vue 3 (maybe a redesign down the line)
 * [x] Use nginx as proxy
 * [ ] Docs on how to use with a existing nginx proxy manager or deploy a new one
 

@@ -43,15 +43,15 @@ export const uploadTorrent = async (req, res, next) => {
       const torrent = Buffer.from(req.body.torrent, "base64");
       const parsed = bencode.decode(torrent);
 
-      if (process.env.SQ_TORRENT_CATEGORIES.length && !req.body.type) {
+      if (process.env.KM_TORRENT_CATEGORIES.length && !req.body.type) {
         res.status(400).send("Torrent must have a category");
         return;
       }
 
-      if (process.env.SQ_TORRENT_CATEGORIES.length) {
+      if (process.env.KM_TORRENT_CATEGORIES.length) {
         const sources =
-          process.env.SQ_TORRENT_CATEGORIES[
-            Object.keys(process.env.SQ_TORRENT_CATEGORIES).find(
+          process.env.KM_TORRENT_CATEGORIES[
+            Object.keys(process.env.KM_TORRENT_CATEGORIES).find(
               (cat) => slugify(cat, { lower: true }) === req.body.type
             )
           ];
@@ -68,7 +68,7 @@ export const uploadTorrent = async (req, res, next) => {
       const user = await User.findOne({ _id: req.userId }).lean();
 
       parsed.info.private = 1;
-      parsed.announce = `${process.env.SQ_BASE_URL}/sq/${user.uid}/announce`;
+      parsed.announce = `${process.env.KM_BASE_URL}/km/${user.uid}/announce`;
       delete parsed["announce-list"];
 
       const infoHash = crypto
@@ -99,7 +99,7 @@ export const uploadTorrent = async (req, res, next) => {
       }
 
       const hasBlackListedFiles = files.some((file) =>
-        (process.env.SQ_EXTENSION_BLACKLIST ?? []).some((ext) =>
+        (process.env.KM_EXTENSION_BLACKLIST ?? []).some((ext) =>
           file.path.endsWith(`.${ext}`)
         )
       );
@@ -192,10 +192,10 @@ export const editTorrent = async (req, res, next) => {
         return;
       }
 
-      if (process.env.SQ_TORRENT_CATEGORIES.length) {
+      if (process.env.KM_TORRENT_CATEGORIES.length) {
         const sources =
-          process.env.SQ_TORRENT_CATEGORIES[
-            Object.keys(process.env.SQ_TORRENT_CATEGORIES).find(
+          process.env.KM_TORRENT_CATEGORIES[
+            Object.keys(process.env.KM_TORRENT_CATEGORIES).find(
               (cat) => slugify(cat, { lower: true }) === req.body.type
             )
           ];
@@ -251,12 +251,12 @@ export const downloadTorrent = async (req, res, next) => {
     const { binary } = torrent;
     const parsed = bencode.decode(Buffer.from(binary, "base64"));
 
-    parsed.announce = `${process.env.SQ_BASE_URL}/sq/${user.uid}/announce`;
+    parsed.announce = `${process.env.KM_BASE_URL}/km/${user.uid}/announce`;
     delete parsed["announce-list"];
     parsed.info.private = 1;
 
     const fileName = `${parsed.info.name.toString()} - ${
-      process.env.SQ_SITE_NAME
+      process.env.KM_SITE_NAME
     }.torrent`;
 
     res.setHeader("Content-Type", "application/x-bittorrent");

@@ -1,14 +1,14 @@
 services:
   nginx:
     image: "nginx:latest"
-    container_name: "km_nginx"
+    container_name: km_nginx
     restart: always
     ports:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
   database:
-    container_name: sq_mongodb
+    container_name: km_mongodb
     image: mongo:6.0
     ports:
       - "127.0.0.1:27017:27017"
@@ -22,19 +22,19 @@ services:
     volumes:
       - type: bind
         source: ./config.js
-        target: /kmtracker/config.js
+        target: /kabuki-market/config.js
     depends_on:
       - database
   client:
-    container_name: sq_client
+    container_name: km_client
     image: ghcr.io/PedroCavaleiro/kabuki-market-client:latest
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
       - type: bind
         source: ./config.js
-        target: /sqtracker/config.js
-      # - ./favicon.png:/kmtracker/public/favicon.png
-      # - ./favicon.ico:/kmtracker/public/favicon.ico
+        target: /kabuki-market/config.js
+      # - ./favicon.png:/kabuki-market/public/favicon.png
+      # - ./favicon.ico:/kabuki-market/public/favicon.ico
     depends_on:
       - api

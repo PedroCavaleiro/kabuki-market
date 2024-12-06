@@ -13,12 +13,12 @@ const createAdminUser = async (mail) => {
 
     const adminUser = new User({
       username: "admin",
-      email: process.env.SQ_ADMIN_EMAIL,
+      email: process.env.KM_ADMIN_EMAIL,
       role: "admin",
       password: hash,
       created,
       remainingInvites: Number.MAX_SAFE_INTEGER,
-      emailVerified: process.env.SQ_DISABLE_EMAIL,
+      emailVerified: process.env.KM_DISABLE_EMAIL,
     });
     adminUser.uid = crypto
       .createHash("sha256")
@@ -31,28 +31,28 @@ const createAdminUser = async (mail) => {
         created,
         role: "admin",
       },
-      process.env.SQ_JWT_SECRET
+      process.env.KM_JWT_SECRET
     );
 
     await adminUser.save();
 
-    if (!process.env.SQ_DISABLE_EMAIL) {
+    if (!process.env.KM_DISABLE_EMAIL) {
       const emailVerificationValidUntil = created + 48 * 60 * 60 * 1000;
       const emailVerificationToken = jwt.sign(
         {
-          user: process.env.SQ_ADMIN_EMAIL,
+          user: process.env.KM_ADMIN_EMAIL,
           validUntil: emailVerificationValidUntil,
         },
-        process.env.SQ_JWT_SECRET
+        process.env.KM_JWT_SECRET
       );
       await sendVerificationEmail(
         mail,
-        process.env.SQ_ADMIN_EMAIL,
+        process.env.KM_ADMIN_EMAIL,
         emailVerificationToken
       );
     }
 
-    console.log("[sq] created initial admin user");
+    console.log("[km] created initial admin user");
   }
 };
 

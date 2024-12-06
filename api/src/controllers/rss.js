@@ -9,14 +9,14 @@ const getTorrentXml = (torrent, userId) => {
       <title>${torrent.name}</title>
       <description>${torrent.description}</description>
       <guid>${torrent.infoHash}</guid>
-      <enclosure url="${process.env.SQ_API_URL}/torrent/download/${torrent.infoHash}/${userId}" type="application/x-bittorrent" />
+      <enclosure url="${process.env.KM_API_URL}/torrent/download/${torrent.infoHash}/${userId}" type="application/x-bittorrent" />
       <torrent>
         <filename>${torrent.name}</filename>
         <contentlength>${torrent.size}</contentlength>
         <trackers>
           <group order="ordered">
             <tracker seeds="${torrent.seeders}" peers="${torrent.seeders + torrent.leechers}">
-              ${process.env.SQ_BASE_URL}/sq/${userId}/announce
+              ${process.env.KM_BASE_URL}/km/${userId}/announce
             </tracker>
           </group>
         </trackers>
@@ -77,8 +77,8 @@ export const rssFeed = (tracker) => async (req, res, next) => {
     res.status(200).send(`<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>${process.env.SQ_SITE_NAME}: ${query ? "results" : "latest"}</title>
-    <link>${process.env.SQ_BASE_URL}</link>
+    <title>${process.env.KM_SITE_NAME}: ${query ? "results" : "latest"}</title>
+    <link>${process.env.KM_BASE_URL}</link>
     ${torrentsXml}
   </channel>
 </rss>`);

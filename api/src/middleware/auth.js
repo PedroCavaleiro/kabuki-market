@@ -5,7 +5,7 @@ const auth = async (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.replace("Bearer ", "");
     try {
-      const decoded = jwt.verify(token, process.env.SQ_JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.KM_JWT_SECRET);
       if (decoded) {
         const user = await User.findOne({ _id: decoded.id });
         if (user) {
@@ -26,8 +26,8 @@ const auth = async (req, res, next) => {
       res.status(500).send(err);
     }
   } else if (
-    req.headers["x-sq-public-access"] === "true" &&
-    req.headers["x-sq-server-secret"] === process.env.SQ_SERVER_SECRET
+    req.headers["x-km-public-access"] === "true" &&
+    req.headers["x-km-server-secret"] === process.env.KM_SERVER_SECRET
   ) {
     next();
   } else {
